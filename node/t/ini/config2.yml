@@ -2,3 +2,4 @@ key: AnotherKey
 save_dir: /tmp/dir1
 port: 
 greeting: "i greet you"
+dbpref: 'dbi:SQLite:db/node.sqlite'

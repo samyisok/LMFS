@@ -20,7 +20,7 @@ use warnings;
 use FindBin;
 use utf8;
 use lib "$FindBin::Bin/..";
-use Test::More tests => 2;                      # last test to print
+use Test::More tests => 3;                      # last test to print
 use Config::Main;
 use Try::Tiny;
 
@@ -50,4 +50,11 @@ subtest 'custom_path' => sub {
 
 };
 
+subtest 'check schema' => sub {
+    Config::Main->_clear_instance;
+    my $correct_size = 303189;
+    my $config = Config::Main->initialize();
+    my $rs = $config->schema->resultset('File')->find({ name => 'dummy.png'});
+    ok( $rs->size == $correct_size, "Schema ok" );
 
+};

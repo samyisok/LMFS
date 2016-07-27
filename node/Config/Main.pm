@@ -17,6 +17,7 @@
 
 package Config::Main;
 
+use utf8;
 use strict;
 use warnings;
 use MooseX::Singleton;
@@ -24,6 +25,9 @@ use Readonly;
 use Carp;
 use YAML::Tiny;
 use 5.018;
+use FindBin;
+use lib "$FindBin::Bin/..";
+use Lib::Db::Schema;
 
 Readonly my $DEF_CONFIG_NAME => 'config.yml';
 Readonly my $DEF_CONFIG_DIR => 'ini';
@@ -54,6 +58,29 @@ has 'params' => (
     writer => 'set_params',
 );
 
+has 'dbuser' => (
+    is => 'ro',
+    isa => 'Str',
+    writer => 'set_dbuser',
+);
+
+has 'dbpass' => (
+    is => 'ro',
+    isa => 'Str',
+    writer => 'set_dbpass',
+);
+
+has 'dbpref' => (
+    is => 'ro',
+    isa => 'Str',
+    writer => 'set_dbpref',
+);
+
+has 'schema' => (
+    is => 'ro',
+    isa => 'Object',
+    writer => 'set_schema',
+);
 
 sub init 
 {
@@ -68,6 +95,15 @@ sub init
     $self->set_key( $conf->{key} ) or croak "You need secret key for operate";
     $self->set_save_dir( $conf->{save_dir} ) or croak "You need folder for files for operate"; 
     $self->set_greeting( $conf->{greeting} ) if $conf->{greeting}; 
+
+    #for normal db
+    $self->set_dbuser( $conf->{dbuser} ) if $conf->{dbuser}; 
+    $self->set_dbpass( $conf->{dbpass} ) if $conf->{dbpass}; 
+    
+    $self->set_dbpref( $conf->{dbpref} ) or croak "You need DataBase to operate"; 
+    my $schema = Lib::Db::Schema->connect($self->dbpref, $self->dbuser, $self->dbpass, { quote_names => 1 });
+    $self->set_schema($schema);
+    $self->schema->storage->debug(1) if $DEBUG;
 
     return;
 }
