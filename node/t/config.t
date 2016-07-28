@@ -1,18 +1,8 @@
-#
 #===============================================================================
-#
 #         FILE: config.t
-#
 #  DESCRIPTION: 
-#
-#        FILES: ---
-#         BUGS: ---
-#        NOTES: ---
 #       AUTHOR: Sergey Magochkin (), magaster@gmail.com
-# ORGANIZATION: 
-#      VERSION: 1.0
 #      CREATED: 07/27/16 14:40:54
-#     REVISION: ---
 #===============================================================================
 
 use strict;
