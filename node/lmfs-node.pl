@@ -13,6 +13,9 @@ use Dancer;
 use YAML;
 use Config::Main;
 use Data::Dumper;
+use Lib::File::Save;
+
+set logger => 'console';
 
 my $conf = Config::Main->initialize;
 
@@ -21,11 +24,22 @@ get '/' => sub  {
                 };
 
 post '/upload' => sub {
-    my %allparams = params;
-    warn Dumper(\%allparams);
     my $json_object = from_json(request->body, config->{'engines'}->{'JSON'});
-    warn Dumper($json_object);
-    return 200;
+    my $success = Lib::File::Save->save($json_object);
+    my $response;
+    if ( $success ){
+        $response = Dancer::Response->new(
+            status  => 200,
+            content => 'ok',
+        );
+    }
+    else {
+        $response = Dancer::Response->new(
+            status  => 501,
+            content => 'Error',
+        );
+    }
+    return $response;
 };
  
 get '/:filename' => sub {

@@ -7,12 +7,11 @@
 
 use strict;
 use warnings;
-use FindBin;
 use utf8;
+use FindBin;
 use lib "$FindBin::Bin/..";
 use Test::More tests => 3;                      # last test to print
 use Config::Main;
-use Try::Tiny;
 
 subtest 'load' => sub {
     my $args = { params => 'string 1' };

@@ -1,4 +1,6 @@
 node/logs
+node/log
 node/db
 manager/logs
+manager/log
 manager/db
