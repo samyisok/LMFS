@@ -19,6 +19,7 @@ use 5.018;
 use FindBin;
 use lib "$FindBin::Bin/..";
 use Lib::Db::Schema;
+use File::Path qw( make_path );
 
 Readonly my $DEF_CONFIG_NAME => 'config.yml';
 Readonly my $DEF_CONFIG_DIR => 'ini';
@@ -86,6 +87,8 @@ sub init
     $self->set_key( $conf->{key} ) or croak "You need secret key for operate";
     $self->set_save_dir( $conf->{save_dir} ) or croak "You need folder for files for operate"; 
     $self->set_greeting( $conf->{greeting} ) if $conf->{greeting}; 
+    
+    $self->init_save_dir;
 
     #for normal db
     $self->set_dbuser( $conf->{dbuser} ) if $conf->{dbuser}; 
@@ -95,7 +98,7 @@ sub init
     my $schema = Lib::Db::Schema->connect($self->dbpref, $self->dbuser, $self->dbpass, { quote_names => 1 });
     $self->set_schema($schema);
     $self->schema->storage->debug(1) if $DEBUG;
-
+    
     return;
 }
 
@@ -108,6 +111,9 @@ sub BUILD
     return;
 }
 
-
+sub init_save_dir {
+    my $self = shift;
+    make_path($self->save_dir) unless (-e $self->save_dir);
+}
 
 1;

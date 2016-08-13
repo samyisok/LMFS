@@ -10,8 +10,10 @@ use warnings;
 use utf8;
 use FindBin;
 use lib "$FindBin::Bin/..";
-use Test::More tests => 3;                      # last test to print
+use Test::More tests => 4;                      # last test to print
 use Config::Main;
+use File::Path qw( remove_tree );
+
 
 subtest 'load' => sub {
     my $args = { params => 'string 1' };
@@ -47,3 +49,29 @@ subtest 'check schema' => sub {
     ok( $rs->size == $correct_size, "Schema ok" );
 
 };
+
+subtest 'check init dir' => sub {
+    Config::Main->_clear_instance;
+    my $correct_test_dir = '/tmp/testdir1';
+    if (-e $correct_test_dir){
+        remove_tree($correct_test_dir);
+    }
+    my $config = Config::Main->initialize({custom_path => 'ini/config3.yml'});
+    ok( -e $correct_test_dir, 'test dir is exists, ok');
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

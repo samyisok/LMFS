@@ -1,0 +1,5 @@
+key: AnotherKey
+save_dir: /tmp/testdir1
+port: 
+greeting: "i greet you"
+dbpref: 'dbi:SQLite:db/node.sqlite'
