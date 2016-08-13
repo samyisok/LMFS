@@ -14,6 +14,7 @@ use YAML;
 use Config::Main;
 use Data::Dumper;
 use Lib::File::Save;
+use Filesys::DfPortable;
 
 set logger => 'console';
 
@@ -21,7 +22,12 @@ my $conf = Config::Main->initialize;
 
 get '/' => sub  {
                 $conf->greeting;
-                };
+};
+
+get '/full' => sub {
+    my $ref = dfportable($conf->save_dir);
+    return $ref->{per};
+};
 
 post '/upload' => sub {
     my $json_object = from_json(request->body, config->{'engines'}->{'JSON'});
@@ -45,5 +51,6 @@ post '/upload' => sub {
 get '/:filename' => sub {
     send_file( $conf->save_dir . "/" . params->{filename}, system_path => 1 );
 };
+
 
 dance;
