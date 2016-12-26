@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use utf8;
 use Moose;
-use json;
+use JSON;
 use FindBin;
 use lib "$FindBin::Bin/../../";
 use Config::Main;
