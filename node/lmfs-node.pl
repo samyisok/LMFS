@@ -26,7 +26,15 @@ get '/' => sub  {
 
 get '/full' => sub {
     my $ref = dfportable($conf->save_dir);
-    return $ref->{per};
+    if ($ref){
+        return $ref->{per};
+    } else {
+        my $response = Dancer::Response->new(
+            status  => 500,
+            content => 'Error',
+    );
+    return $response;
+    }
 };
 
 post '/upload' => sub {
@@ -41,7 +49,7 @@ post '/upload' => sub {
     }
     else {
         $response = Dancer::Response->new(
-            status  => 501,
+            status  => 500,
             content => 'Error',
         );
     }
