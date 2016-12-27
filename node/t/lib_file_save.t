@@ -13,8 +13,9 @@ use lib "$FindBin::Bin/..";
 use Config::Main;
 use File::Copy;
 use Digest::SHA1 qw(sha1_hex);
-use Test::More tests => 1;                      # last test to print
+use Test::More tests => 2;                      # last test to print
 use Lib::File::Save;
+use Lib::File::List;
 use File::Compare;
 
 my $file_name = 'dummy2.png';
@@ -51,5 +52,10 @@ Lib::File::Save->save($hash_file);
 my $saved_file_path = $conf->save_dir . '/' . $file_name;
 
 ok(compare($file_path, $saved_file_path) == 0, 'files are equal, saved ok');
+my $data = Lib::File::List->get_all();
+my $correct_data = qq/[{"sha1":"c16339541bce3a46de7b6c859c2d3ff63bb5f09b","name":"dummy.png"},{"sha1":"3d2f9af24872364476a34ac85b08186ecbccc7cf","name":"dummy2.png"}]/;
+
+ok( $data eq $correct_data, 'get correct json, ok' );
+
 unlink($current_db); 
 unlink($saved_file_path); 

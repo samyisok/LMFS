@@ -37,6 +37,10 @@ get '/full' => sub {
     }
 };
 
+get '/list' => sub {
+    return Lib::File::List->get_all();
+};
+
 post '/upload' => sub {
     my $json_object = from_json(request->body, config->{'engines'}->{'JSON'});
     my $success = Lib::File::Save->save($json_object);
